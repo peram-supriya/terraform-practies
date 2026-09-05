@@ -1,0 +1,34 @@
+resource "aws_instance" "example" {
+  count = 7
+  ami           = "ami-0220d79f3f480ecf5"
+  instance_type = "t3.micro"
+  vpc_security_group_ids = [aws_security_group.allow_list.id]
+  
+
+  tags = {
+    Name = var.instances[count.index]
+    Project = "roboshop"
+  }
+}
+
+resource "aws_security_group" "allow_list" {
+  name        = "allow_all_terraform"   #allow all teraform
+  description = "Allow all traffic"
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+    tags = {
+        Name = "allow_all_list"
+    }
+}
